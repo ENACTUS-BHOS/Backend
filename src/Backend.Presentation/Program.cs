@@ -20,9 +20,13 @@ builder.Services.AddDbContext<MirasDbContext>(dbContextOptionsBuilder =>
     });
 });
 
+// Register the Artists services and repositories
 builder.Services.AddScoped<IArtistsRepository, ArtistsSqlRepository>();
-
 builder.Services.AddScoped<IArtistsService, ArtistsSqlService>();
+
+// Register the Team services and repositories
+builder.Services.AddScoped<ITeamRepository, TeamSqlRepository>();
+builder.Services.AddScoped<ITeamService, TeamSqlService>();
 
 builder.Services.AddEndpointsApiExplorer();
 
@@ -48,5 +52,9 @@ app.UseSwaggerUI();
 app.UseHttpsRedirection();
 
 app.UseCors("BlazorWasmPolicy");
+
+app.UseAuthorization();
+
+app.MapControllers();
 
 app.Run();
