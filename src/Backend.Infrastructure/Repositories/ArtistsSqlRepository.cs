@@ -13,7 +13,7 @@ public class ArtistsSqlRepository : IArtistsRepository
 
     public IEnumerable<Artist> GetAll()
     {
-        var artist = this.dbContext.Artists.AsEnumerable();
+        var artist = this.dbContext.Artists.Where(artist => artist.IsActive == true);
 
         return artist;
     }
@@ -29,7 +29,7 @@ public class ArtistsSqlRepository : IArtistsRepository
     {
         var artist = await this.dbContext.Artists.FirstOrDefaultAsync(artist => artist.Id == id);
 
-        this.dbContext.Artists.Remove(artist!);
+        artist!.IsActive = false;
 
         await this.dbContext.SaveChangesAsync();
     }
