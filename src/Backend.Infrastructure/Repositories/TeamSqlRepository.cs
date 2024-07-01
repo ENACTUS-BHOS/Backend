@@ -16,7 +16,9 @@ namespace Backend.Infrastructure.Repositories
 
         public IEnumerable<Team> GetAll()
         {
-            return this.dbContext.Teams.AsNoTracking().ToList();
+            var teams = this.dbContext.Teams.Where(t => t.IsActive == true);
+
+            return teams;
         }
 
         public async Task<Team?> GetById(int id)
@@ -43,6 +45,7 @@ namespace Backend.Infrastructure.Repositories
         public async Task UpdateAsync(int id, Team newTeam)
         {
             var team = await this.dbContext.Teams.FirstOrDefaultAsync(team => team.Id == id);
+            
             if (team != null)
             {
                 team.Name = newTeam.Name;
