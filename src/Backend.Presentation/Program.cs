@@ -28,6 +28,10 @@ builder.Services.AddScoped<IArtistsService, ArtistsSqlService>();
 builder.Services.AddScoped<ITeamRepository, TeamSqlRepository>();
 builder.Services.AddScoped<ITeamService, TeamSqlService>();
 
+// Register the Tutorial services and repositories
+builder.Services.AddScoped<ITutorialRepository, TutorialSqlRepository>();
+builder.Services.AddScoped<ITutorialService, TutorialSqlService>();
+
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen();
