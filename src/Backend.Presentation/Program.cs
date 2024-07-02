@@ -32,6 +32,10 @@ builder.Services.AddScoped<ITeamService, TeamSqlService>();
 builder.Services.AddScoped<ITutorialRepository, TutorialSqlRepository>();
 builder.Services.AddScoped<ITutorialService, TutorialSqlService>();
 
+// Register Exhibition services and repositories
+builder.Services.AddScoped<IExhibitionRepository, ExhibitionSqlRepository>();
+builder.Services.AddScoped<IExhibitionService, ExhibitionSqlService>();
+
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen();

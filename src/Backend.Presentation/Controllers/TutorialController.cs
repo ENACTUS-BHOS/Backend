@@ -1,10 +1,10 @@
-namespace Backend.Presentation.Controllers
-{
-    using Backend.Core.Models;
-    using Backend.Core.Services;
-    using Microsoft.AspNetCore.Http.Extensions;
-    using Microsoft.AspNetCore.Mvc;
-    using System.Threading.Tasks;
+namespace Backend.Presentation.Controllers;
+
+using Backend.Core.Models;
+using Backend.Core.Services;
+using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
     [ApiController]
     [Route("/api/[controller]/[action]")]
@@ -75,4 +75,3 @@ namespace Backend.Presentation.Controllers
             return Ok(results);
         }
     }
-}
