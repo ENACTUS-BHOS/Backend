@@ -39,7 +39,7 @@ namespace Backend.Infrastructure.Repositories
             var tutorial = await _context.Tutorials.FirstOrDefaultAsync(t => t.Id == id);
             if (tutorial != null)
             {
-                _context.Tutorials.Remove(tutorial);
+                tutorial.IsActive = false;
                 await _context.SaveChangesAsync();
             }
         }
