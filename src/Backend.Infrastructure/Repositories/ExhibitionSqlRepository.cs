@@ -19,26 +19,28 @@ namespace Backend.Infrastructure.Repositories
 
         public IEnumerable<Exhibition> GetAll()
         {
-            return _context.Exhibitions.ToList();
+            return _context.Exhibitions.Where(e => e.IsActive == true);
         }
 
         public async Task<Exhibition?> GetByIdAsync(int id)
         {
-            return await _context.Exhibitions.FindAsync(id);
+            return await _context.Exhibitions.FirstOrDefaultAsync(e => e.Id == id);
         }
 
         public async Task AddAsync(Exhibition exhibition)
         {
             await _context.Exhibitions.AddAsync(exhibition);
+
             await _context.SaveChangesAsync();
         }
 
         public async Task RemoveAsync(int id)
         {
-            var exhibition = await _context.Exhibitions.FindAsync(id);
+            var exhibition = await _context.Exhibitions.FirstOrDefaultAsync(e => e.Id == id);
             if (exhibition != null)
             {
-                _context.Exhibitions.Remove(exhibition);
+                exhibition.IsActive = false;
+
                 await _context.SaveChangesAsync();
             }
         }
@@ -66,9 +68,8 @@ namespace Backend.Infrastructure.Repositories
                 return Enumerable.Empty<Exhibition>();
             }
 
-            return _context.Exhibitions
-                .Where(e => e.Name !=null && e.Name.Contains(searchTerm) || (e.Description != null && e.Description.Contains(searchTerm)))
-                .ToList();
+            return _context.Exhibitions.Where(t => (t.Name.ToLower() ?? string.Empty).Contains(searchTerm.ToLower()) || (t.Description.ToLower() ?? string.Empty).Contains(searchTerm.ToLower())
+            || searchTerm.Contains(t.Name.ToLower() ?? string.Empty) || searchTerm.Contains(t.Description.ToLower() ?? string.Empty));
         }
     }
 }

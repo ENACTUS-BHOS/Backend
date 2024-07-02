@@ -58,7 +58,7 @@ namespace Backend.Presentation.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAsync(int id, Exhibition exhibition)
         {
-            if (exhibition == null || id != exhibition.Id)
+            if (exhibition == null)
             {
                 return BadRequest();
             }

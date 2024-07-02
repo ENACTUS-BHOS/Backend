@@ -37,7 +37,8 @@ namespace Backend.Infrastructure.Repositories
             var team = await this.dbContext.Teams.FirstOrDefaultAsync(team => team.Id == id);
             if (team != null)
             {
-                this.dbContext.Teams.Remove(team);
+                team.IsActive = false;
+                
                 await this.dbContext.SaveChangesAsync();
             }
         }
