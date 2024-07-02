@@ -62,7 +62,7 @@ public class TutorialController : ControllerBase
         {
             return BadRequest();
         }
-
+        
         await _tutorialService.UpdateAsync(id, tutorial);
 
         return Ok();
