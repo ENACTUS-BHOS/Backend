@@ -11,8 +11,10 @@ public class ProductSqlService : IProductsService
 
     public ProductSqlService(IProductsRepository productsRepository) => this.productsRepository = productsRepository;
 
-    public async Task AddAsync(Product product)
+    public async Task AddAsync(Product? product)
     {
+        ArgumentNullException.ThrowIfNull(product);
+
         await this.productsRepository.AddAsync(product);
     }
 
@@ -23,32 +25,46 @@ public class ProductSqlService : IProductsService
         return products;
     }
 
-    public Task<Product?> GetByIdAsync(int id)
+    public Task<Product?> GetByIdAsync(int? id)
     {
-        var product = this.productsRepository.GetByIdAsync(id);
+        ArgumentNullException.ThrowIfNull(id);
+
+        var product = this.productsRepository.GetByIdAsync((int)id);
 
         return product;
     }
 
-    public async Task OrderAsync(Product product, UserDto userDto)
+    public async Task OrderAsync(Product? product, UserDto? userDto)
     {
+        ArgumentNullException.ThrowIfNull(product);
+
+        ArgumentNullException.ThrowIfNull(userDto);
+
         await this.productsRepository.OrderAsync(product, userDto);
     }
 
-    public async Task RemoveAsync(int id)
+    public async Task RemoveAsync(int? id)
     {
-        await this.productsRepository.RemoveAsync(id);
+        ArgumentNullException.ThrowIfNull(id);
+
+        await this.productsRepository.RemoveAsync((int)id);
     }
 
-    public IEnumerable<Product> TakeTop(int count)
+    public IEnumerable<Product> TakeTop(int? count)
     {
-        var products = this.productsRepository.TakeTop(count);
+        ArgumentNullException.ThrowIfNull(count);
+        
+        var products = this.productsRepository.TakeTop((int)count);
 
         return products;
     }
 
-    public async Task UpdateAsync(int id, Product newProduct)
+    public async Task UpdateAsync(int? id, Product? newProduct)
     {
-        await this.productsRepository.UpdateAsync(id, newProduct);
+        ArgumentNullException.ThrowIfNull(id);
+        
+        ArgumentNullException.ThrowIfNull(newProduct);
+
+        await this.productsRepository.UpdateAsync((int)id, newProduct);
     }
 }
