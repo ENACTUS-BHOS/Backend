@@ -25,7 +25,7 @@ public class TeamController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddAsync(Team? team)
+    public async Task<IActionResult> AddAsync([FromForm] Team? team, IFormFile file)
     {
         if (team == null)
         {

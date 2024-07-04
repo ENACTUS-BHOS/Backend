@@ -11,10 +11,7 @@ public class ArtistsController : ControllerBase
 {
     private readonly IArtistsService artistsService;
 
-    public ArtistsController(IArtistsService artistsService)
-    {
-        this.artistsService = artistsService;
-    }
+    public ArtistsController(IArtistsService artistsService) => this.artistsService = artistsService;
 
     [HttpGet]
     public IActionResult GetAll()
@@ -24,8 +21,26 @@ public class ArtistsController : ControllerBase
         return base.Ok(artist);
     }
 
+    [HttpGet]
+    [Route("{skip}/{take}")]
+    public IActionResult Get(int? skip, int? take)
+    {
+        var products = this.artistsService.Get(skip, take);
+
+        return base.Ok(products);
+    }
+
+    [HttpGet]
+    [Route("{id}")]
+    public async Task<IActionResult> GetByIdAsync(int? id)
+    {
+        var product = await this.artistsService.GetByIdAsync(id);
+
+        return base.Ok(product);
+    }
+
     [HttpPost]
-    public async Task<IActionResult> AddAsync(Artist? artist)
+    public async Task<IActionResult> AddAsync([FromForm] Artist? artist, IFormFile file)
     {
         await this.artistsService.AddAsync(artist);
 

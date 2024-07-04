@@ -36,7 +36,7 @@ namespace Backend.Presentation.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddAsync(Exhibition exhibition)
+        public async Task<IActionResult> AddAsync([FromForm] Exhibition exhibition, IFormFile file)
         {
             if (exhibition == null)
             {

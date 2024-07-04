@@ -69,4 +69,32 @@ public class ProductsSqlRepository : IProductsRepository
 
         await this.dbContext.SaveChangesAsync();
     }
+
+    public IEnumerable<Product> GetByAuthorId(int authorId)
+    {
+        var products = this.dbContext.Products.Where(product => product.ArtistId == authorId);
+
+        return products;
+    }
+
+    public IEnumerable<Product> SortByPrice(int authorId, bool isAscending)
+    {
+        var products = this.dbContext.Products.Where(product => product.ArtistId == authorId);
+
+        if (isAscending)
+        {
+            return products.OrderBy(product => product.Price).AsEnumerable();
+        }
+
+        return products.OrderByDescending(product => product.Price).AsEnumerable();
+    }
+
+    public IEnumerable<Product> FilterByPrice(int authorId, int minimumPrice, int maximumPrice)
+    {
+        var products = this.dbContext.Products.Where(product => product.ArtistId == authorId);
+        
+        products = products.Where(product => product.Price >= minimumPrice && product.Price <= maximumPrice);
+
+        return products;
+    }
 }

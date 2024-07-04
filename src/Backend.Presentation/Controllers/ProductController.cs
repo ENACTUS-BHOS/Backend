@@ -31,6 +31,16 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet]
+    [Route("{authorId}")]
+    public IActionResult GetByAuthorId(int? authorId)
+    {
+        var product = this.productsService.GetByAuthorId(authorId);
+
+        return base.Ok(product);
+    }
+
+    [HttpGet]
+    [Route("{count}")]
     public IActionResult TakeTop(int? count)
     {
         var products = this.productsService.TakeTop(count);
@@ -38,8 +48,26 @@ public class ProductController : ControllerBase
         return base.Ok(products);
     }
 
+    [HttpGet]
+    [Route("{authorId}/{isAscending}")]
+    public IActionResult GetSortedByPrice(int? authorId, bool? isAscending)
+    {
+        var products = this.productsService.SortByPrice(authorId, isAscending);
+
+        return base.Ok(products);
+    }
+
+    [HttpGet]
+    [Route("{authorId}/{minimumPrice}/{maximumPrice}")]
+    public IActionResult GetFilteredByPrice(int? authorId, int? minimumPrice, int? maximumPrice)
+    {
+        var products = this.productsService.FilterByPrice(authorId, minimumPrice, maximumPrice);
+
+        return base.Ok(products);
+    }
+
     [HttpPost]
-    public async Task<IActionResult> AddAsync(Product? product)
+    public async Task<IActionResult> AddAsync([FromForm] Product? product, IFormFile file)
     {
         await this.productsService.AddAsync(product);
 
