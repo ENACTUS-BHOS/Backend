@@ -1,6 +1,5 @@
 namespace Backend.Presentation.Controllers;
 
-using Backend.Core.Dtos;
 using Backend.Core.Models;
 using Backend.Core.Services;
 using Microsoft.AspNetCore.Http.Extensions;
@@ -23,7 +22,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet]
-    [Route("/api/[controller]/[action]/{id}")]
+    [Route("{id}")]
     public async Task<IActionResult> GetByIdAsync(int? id)
     {
         var product = await this.productsService.GetByIdAsync(id);
@@ -40,7 +39,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Post(Product? product)
+    public async Task<IActionResult> AddAsync(Product? product)
     {
         await this.productsService.AddAsync(product);
 
@@ -48,7 +47,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpDelete]
-    [Route("/api/[controller]/[action]/{id}")]
+    [Route("{id}")]
     public async Task<IActionResult> DeleteAsync(int? id)
     {
         await this.productsService.RemoveAsync(id);
@@ -57,7 +56,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpPut]
-    [Route("/api/[controller]/[action]/{id}")]
+    [Route("{id}")]
     public async Task<IActionResult> UpdateAsync(int? id, Product? product)
     {
         await this.productsService.UpdateAsync(id, product);
@@ -66,9 +65,9 @@ public class ProductController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> OrderAsync(Product? product, UserDto userDto)
+    public async Task<IActionResult> OrderAsync(Order? order)
     {
-        await this.productsService.OrderAsync(product, userDto);
+        await this.productsService.OrderAsync(order!);
 
         return base.Ok();
     }

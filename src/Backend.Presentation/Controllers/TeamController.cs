@@ -38,6 +38,7 @@ public class TeamController : ControllerBase
     }
 
     [HttpDelete]
+    [Route("{id}")]
     public async Task<IActionResult> DeleteAsync(int? id)
     {
         if (!id.HasValue)
@@ -51,6 +52,7 @@ public class TeamController : ControllerBase
     }
 
     [HttpPut]
+    [Route("{id}")]
     public async Task<IActionResult> UpdateAsync(int? id, Team? team)
     {
         if (!id.HasValue || team == null || id != team.Id)

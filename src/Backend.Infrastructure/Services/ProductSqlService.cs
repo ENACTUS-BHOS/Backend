@@ -1,9 +1,8 @@
-using Backend.Core.Dtos;
+namespace Backend.Infrastructure.Services;
+
 using Backend.Core.Models;
 using Backend.Core.Repositories;
 using Backend.Core.Services;
-
-namespace Backend.Infrastructure.Services;
 
 public class ProductSqlService : IProductsService
 {
@@ -34,13 +33,11 @@ public class ProductSqlService : IProductsService
         return product;
     }
 
-    public async Task OrderAsync(Product? product, UserDto? userDto)
+    public async Task OrderAsync(Order? order)
     {
-        ArgumentNullException.ThrowIfNull(product);
+        ArgumentNullException.ThrowIfNull(order);
 
-        ArgumentNullException.ThrowIfNull(userDto);
-
-        await this.productsRepository.OrderAsync(product, userDto);
+        await this.productsRepository.OrderAsync(order);
     }
 
     public async Task RemoveAsync(int? id)
@@ -62,7 +59,7 @@ public class ProductSqlService : IProductsService
     public async Task UpdateAsync(int? id, Product? newProduct)
     {
         ArgumentNullException.ThrowIfNull(id);
-        
+
         ArgumentNullException.ThrowIfNull(newProduct);
 
         await this.productsRepository.UpdateAsync((int)id, newProduct);

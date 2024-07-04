@@ -32,9 +32,18 @@ builder.Services.AddScoped<ITeamService, TeamSqlService>();
 builder.Services.AddScoped<ITutorialRepository, TutorialSqlRepository>();
 builder.Services.AddScoped<ITutorialService, TutorialSqlService>();
 
-// Register Exhibition services and repositories
+// Register the Exhibition services and repositories
+
 builder.Services.AddScoped<IExhibitionRepository, ExhibitionSqlRepository>();
 builder.Services.AddScoped<IExhibitionService, ExhibitionSqlService>();
+
+// Register the Products services and repositories
+builder.Services.AddScoped<IProductsRepository, ProductsSqlRepository>();
+builder.Services.AddScoped<IProductsService, ProductSqlService>();
+
+// Register the Orders services and repositories
+builder.Services.AddScoped<IOrdersRepository, OrdersSqlRepository>();
+builder.Services.AddScoped<IOrdersService, OrdersSqlServer>();
 
 builder.Services.AddEndpointsApiExplorer();
 

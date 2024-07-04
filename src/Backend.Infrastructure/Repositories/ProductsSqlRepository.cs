@@ -1,6 +1,5 @@
 namespace Backend.Infrastructure.Repositories;
 
-using Backend.Core.Dtos;
 using Backend.Core.Models;
 using Backend.Core.Repositories;
 using Backend.Infrastructure.Data;
@@ -40,7 +39,7 @@ public class ProductsSqlRepository : IProductsRepository
         await this.dbContext.SaveChangesAsync();
     }
 
-    public Task OrderAsync(Product product, UserDto userDto)
+    public Task OrderAsync(Order order)
     {
         throw new NotImplementedException();
     }

@@ -1,6 +1,5 @@
 namespace Backend.Core.Services;
 
-using Backend.Core.Dtos;
 using Backend.Core.Models;
 
 public interface IProductsService
@@ -11,5 +10,5 @@ public interface IProductsService
     Task AddAsync(Product? product);
     Task RemoveAsync(int? id);
     Task UpdateAsync(int? id, Product? newProduct);
-    Task OrderAsync(Product? product, UserDto? userDto);
+    Task OrderAsync(Order order);
 }

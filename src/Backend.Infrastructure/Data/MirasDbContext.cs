@@ -10,5 +10,7 @@ public class MirasDbContext : DbContext
     public DbSet<Tutorial> Tutorials { get; set; } 
     public DbSet<Exhibition> Exhibitions { get; set; }
     public DbSet<Product> Products { get; set; }
+    public DbSet<Order> Orders { get; set; }
+    
     public MirasDbContext(DbContextOptions<MirasDbContext> options) : base(options) { }
 }

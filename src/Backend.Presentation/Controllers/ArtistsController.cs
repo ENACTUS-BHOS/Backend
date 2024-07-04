@@ -33,6 +33,7 @@ public class ArtistsController : ControllerBase
     }
 
     [HttpDelete]
+    [Route("{id}")]
     public async Task<IActionResult> DeleteAsync(int? id)
     {
         await this.artistsService.RemoveAsync(id);
@@ -41,6 +42,7 @@ public class ArtistsController : ControllerBase
     }
 
     [HttpPut]
+    [Route("{id}")]
     public async Task<IActionResult> UpdateAsync(int? id, Artist? artist)
     {
         await this.artistsService.UpdateAsync(id, artist);
