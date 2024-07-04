@@ -53,6 +53,8 @@ namespace Backend.Infrastructure.Repositories
                 tutorial.Description = newTutorial.Description;
                 tutorial.VideoUrl = newTutorial.VideoUrl;
                 tutorial.IsActive = newTutorial.IsActive;
+                tutorial.Category = newTutorial.Category;
+                tutorial.VideoDuration = newTutorial.VideoDuration;
                 await _context.SaveChangesAsync();
             }
         }
@@ -61,6 +63,12 @@ namespace Backend.Infrastructure.Repositories
         {
             return _context.Tutorials.Where(t => (t.Title.ToLower() ?? string.Empty).Contains(searchTerm.ToLower()) || (t.Description.ToLower() ?? string.Empty).Contains(searchTerm.ToLower())
             || searchTerm.Contains(t.Title.ToLower() ?? string.Empty) || searchTerm.Contains(t.Description.ToLower() ?? string.Empty));
+        }
+        public IEnumerable<Tutorial> GetByCategory(string category)
+        {
+            return _context.Tutorials
+                .Where(t => t.Category == category)
+                .ToList();
         }
     }
 }

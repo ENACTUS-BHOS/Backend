@@ -12,5 +12,6 @@ namespace Backend.Core.Repositories
         Task RemoveAsync(int id);
         Task UpdateAsync(int id, Tutorial newTutorial);
         IEnumerable<Tutorial> Search(string searchTerm); // Add search method
+        IEnumerable<Tutorial> GetByCategory(string category); // Add method to get tutorials by category
     }
 }
