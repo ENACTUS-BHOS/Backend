@@ -17,6 +17,26 @@ public class ArtistsSqlService : IArtistsService
         return artist;
     }
 
+    public async Task<Artist> GetByIdAsync(int? id)
+    {
+        ArgumentNullException.ThrowIfNull(id);
+
+        var artist = await this.artistsRepository.GetByIdAsync((int)id);
+
+        return artist;
+    }
+
+    public IEnumerable<Artist> Get(int? skip, int? take)
+    {
+        ArgumentNullException.ThrowIfNull(skip);
+
+        ArgumentNullException.ThrowIfNull(take);
+
+        var artists = this.artistsRepository.Get((int)skip, (int)take);
+
+        return artists;
+    }
+
     public async Task AddAsync(Artist? artist)
     {
         ArgumentNullException.ThrowIfNull(artist);
