@@ -55,5 +55,10 @@ namespace Backend.Infrastructure.Services
         {
             return _tutorialRepository.Search(searchTerm);
         }
+                public IEnumerable<Tutorial> GetByCategory(string category)
+        {
+            return _tutorialRepository.GetByCategory(category);
+        }
+
     }
 }

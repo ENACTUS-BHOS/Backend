@@ -7,5 +7,7 @@ namespace Backend.Core.Models
         public string? Description { get; set; }
         public string? VideoUrl { get; set; }
         public bool IsActive { get; set; } = true;
+        public string? Category { get; set; }
+        public TimeSpan? VideoDuration { get; set; }
     }
 }
