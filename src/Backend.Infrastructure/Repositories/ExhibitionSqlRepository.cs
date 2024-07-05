@@ -30,7 +30,6 @@ namespace Backend.Infrastructure.Repositories
         public async Task AddAsync(Exhibition exhibition)
         {
             await _context.Exhibitions.AddAsync(exhibition);
-
             await _context.SaveChangesAsync();
         }
 
@@ -40,12 +39,11 @@ namespace Backend.Infrastructure.Repositories
             if (exhibition != null)
             {
                 exhibition.IsActive = false;
-
                 await _context.SaveChangesAsync();
             }
         }
 
-         public async Task UpdateAsync(int id, Exhibition newExhibition)
+        public async Task UpdateAsync(int id, Exhibition newExhibition)
         {
             var existingExhibition = await _context.Exhibitions.FindAsync(id);
             if (existingExhibition != null)
@@ -54,6 +52,7 @@ namespace Backend.Infrastructure.Repositories
                 existingExhibition.Description = newExhibition.Description; // Handle possible null
                 existingExhibition.ImageUrl = newExhibition.ImageUrl;
                 existingExhibition.VideoUrl = newExhibition.VideoUrl;
+                existingExhibition.ImageUrls = newExhibition.ImageUrls; // Update the list of images
                 existingExhibition.IsActive = newExhibition.IsActive;
 
                 _context.Exhibitions.Update(existingExhibition);

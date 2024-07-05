@@ -4,6 +4,7 @@ namespace Backend.Presentation.Controllers
     using Backend.Core.Services;
     using Microsoft.AspNetCore.Http.Extensions;
     using Microsoft.AspNetCore.Mvc;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     [ApiController]
@@ -36,7 +37,7 @@ namespace Backend.Presentation.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddAsync([FromForm] Exhibition exhibition, IFormFile file)
+        public async Task<IActionResult> AddAsync([FromBody] Exhibition exhibition)
         {
             if (exhibition == null)
             {
@@ -56,7 +57,7 @@ namespace Backend.Presentation.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAsync(int id, Exhibition exhibition)
+        public async Task<IActionResult> UpdateAsync(int id, [FromBody] Exhibition exhibition)
         {
             if (exhibition == null)
             {

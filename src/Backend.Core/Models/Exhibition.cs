@@ -8,5 +8,6 @@ namespace Backend.Core.Models
         public string? ImageUrl { get; set; }
         public string? VideoUrl { get; set; }
         public bool IsActive { get; set; } = true;
+        public List<string> ImageUrls { get; set; } = new List<string>(); // List of images for the detail page
     }
 }
