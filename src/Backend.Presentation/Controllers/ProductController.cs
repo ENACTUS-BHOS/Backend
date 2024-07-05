@@ -2,6 +2,7 @@ namespace Backend.Presentation.Controllers;
 
 using Backend.Core.Models;
 using Backend.Core.Services;
+using Backend.Infrastructure.Services;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,8 +11,14 @@ using Microsoft.AspNetCore.Mvc;
 public class ProductController : ControllerBase
 {
     private readonly IProductsService productsService;
+    private readonly BlobContainerService blobContainerService;
 
-    public ProductController(IProductsService productsService) => this.productsService = productsService;
+    public ProductController(IProductsService productsService)
+    {
+        this.productsService = productsService;
+
+        this.blobContainerService = new BlobContainerService();
+    }
 
     [HttpGet]
     public IActionResult GetAll()
@@ -69,6 +76,17 @@ public class ProductController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> AddAsync([FromForm] Product? product, IFormFile file)
     {
+        if (file != null)
+        {
+            var rawPath = Guid.NewGuid().ToString() + file.FileName;
+
+            var path = rawPath.Replace(" ", "%20");
+
+            product!.ImageUrl = "https://miras.blob.core.windows.net/multimedia/" + path;
+
+            await this.blobContainerService.UploadAsync(file.OpenReadStream(), rawPath);
+        }
+
         await this.productsService.AddAsync(product);
 
         return base.Created(base.HttpContext.Request.GetDisplayUrl(), product);

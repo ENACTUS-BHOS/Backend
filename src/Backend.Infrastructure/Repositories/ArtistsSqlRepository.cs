@@ -56,8 +56,6 @@ public class ArtistsSqlRepository : IArtistsRepository
 
         artist!.Description = newArtist.Description;
 
-        artist!.ImageUrl = newArtist.ImageUrl;
-
         artist!.Major = newArtist.Major;
 
         await this.dbContext.SaveChangesAsync();
