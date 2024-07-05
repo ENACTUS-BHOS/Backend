@@ -50,7 +50,6 @@ namespace Backend.Infrastructure.Repositories
             if (tutorial != null)
             {
                 tutorial.Title = newTutorial.Title;
-                tutorial.Description = newTutorial.Description;
                 tutorial.VideoUrl = newTutorial.VideoUrl;
                 tutorial.IsActive = newTutorial.IsActive;
                 tutorial.Category = newTutorial.Category;
@@ -61,9 +60,10 @@ namespace Backend.Infrastructure.Repositories
 
         public IEnumerable<Tutorial> Search(string searchTerm)
         {
-            return _context.Tutorials.Where(t => (t.Title.ToLower() ?? string.Empty).Contains(searchTerm.ToLower()) || (t.Description.ToLower() ?? string.Empty).Contains(searchTerm.ToLower())
-            || searchTerm.Contains(t.Title.ToLower() ?? string.Empty) || searchTerm.Contains(t.Description.ToLower() ?? string.Empty));
+            return _context.Tutorials.Where(t => (t.Title.ToLower() ?? string.Empty).Contains(searchTerm.ToLower())
+            || searchTerm.Contains(t.Title.ToLower() ?? string.Empty));
         }
+
         public IEnumerable<Tutorial> GetByCategory(string category)
         {
             return _context.Tutorials
