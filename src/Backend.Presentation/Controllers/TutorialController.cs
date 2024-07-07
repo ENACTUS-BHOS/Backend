@@ -24,6 +24,15 @@ namespace Backend.Presentation.Controllers
             return Ok(tutorials);
         }
 
+        [HttpGet]
+        [Route("{skip}/{take}")]
+        public IActionResult Get(int skip, int take)
+        {
+            var tutorials = _tutorialService.Get(skip, take);
+            
+            return Ok(tutorials);
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -36,7 +45,7 @@ namespace Backend.Presentation.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddAsync(Tutorial tutorial)
+        public async Task<IActionResult> AddAsync([FromForm]Tutorial tutorial)
         {
             if (tutorial == null)
             {

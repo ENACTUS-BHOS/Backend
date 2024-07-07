@@ -22,6 +22,13 @@ namespace Backend.Infrastructure.Repositories
             return _context.Tutorials.Where(tutorial => tutorial.IsActive == true);
         }
 
+        public IEnumerable<Tutorial> Get(int skip, int take)
+        {
+            var tutorials = this._context.Tutorials.Skip(skip).Take(take);
+
+            return tutorials;
+        }
+
         public async Task<Tutorial?> GetByIdAsync(int id)
         {
             return await _context.Tutorials.FirstOrDefaultAsync(t => t.Id == id);
@@ -53,7 +60,7 @@ namespace Backend.Infrastructure.Repositories
                 tutorial.VideoUrl = newTutorial.VideoUrl;
                 tutorial.IsActive = newTutorial.IsActive;
                 tutorial.Category = newTutorial.Category;
-                tutorial.VideoDuration = newTutorial.VideoDuration;
+                tutorial.DurationInSeconds = newTutorial.DurationInSeconds;
                 await _context.SaveChangesAsync();
             }
         }

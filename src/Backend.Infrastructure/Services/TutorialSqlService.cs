@@ -60,5 +60,10 @@ namespace Backend.Infrastructure.Services
         {
             return _tutorialRepository.GetByCategory(category);
         }
+
+        public IEnumerable<Tutorial> Get(int skip, int take)
+        {
+            return this._tutorialRepository.Get(skip, take);
+        }
     }
 }

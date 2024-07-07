@@ -7,6 +7,6 @@ namespace Backend.Core.Models
         public string? VideoUrl { get; set; }
         public bool IsActive { get; set; } = true;
         public string? Category { get; set; }
-        public TimeSpan? VideoDuration { get; set; }
+        public int? DurationInSeconds { get; set; }
     }
 }
