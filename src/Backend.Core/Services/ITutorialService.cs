@@ -8,6 +8,9 @@ namespace Backend.Core.Services
     {
         IEnumerable<Tutorial> GetAllTutorials();
         Task<Tutorial?> GetByIdAsync(int id);
+        IEnumerable<string> GetAllCategories();
+        int TutorialsCount(string? search, string? category, bool? isSortAscending);
+        IEnumerable<Tutorial> Get(int skip, int take, string? search, string? category, bool? isSortAscending);
         IEnumerable<Tutorial> Get(int skip, int take);
         Task AddAsync(Tutorial tutorial);
         Task RemoveAsync(int id);

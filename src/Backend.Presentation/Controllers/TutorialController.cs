@@ -25,12 +25,27 @@ namespace Backend.Presentation.Controllers
         }
 
         [HttpGet]
-        [Route("{skip}/{take}")]
-        public IActionResult Get(int skip, int take)
+        public IActionResult Get(int skip, int take, string? search, string? category, bool? isSortAscending)
         {
-            var tutorials = _tutorialService.Get(skip, take);
-            
+            var tutorials = this._tutorialService.Get(skip, take, search, category, isSortAscending);
+
             return Ok(tutorials);
+        }
+
+        [HttpGet]
+        public IActionResult GetAllCategories()
+        {
+            var categories = this._tutorialService.GetAllCategories();
+
+            return base.Ok(categories);
+        }
+
+        [HttpGet]
+        public IActionResult GetTutorialsCount(string? search, string? category, bool? isSortAscending)
+        {
+            var count = _tutorialService.TutorialsCount(search, category, isSortAscending);
+
+            return base.Ok(count);
         }
 
         [HttpGet("{id}")]

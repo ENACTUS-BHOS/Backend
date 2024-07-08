@@ -7,8 +7,11 @@ namespace Backend.Core.Repositories
     public interface ITutorialRepository
     {
         IEnumerable<Tutorial> GetAll();
-         Task<Tutorial?> GetByIdAsync(int id);
-         IEnumerable<Tutorial> Get(int skip, int take);
+        IEnumerable<string> GetAllCategories();
+        int TutorialsCount(string? search, string? category, bool? isSortAscending);
+        IEnumerable<Tutorial> Get(int skip, int take, string? search, string? category, bool? isSortAscending);
+        Task<Tutorial?> GetByIdAsync(int id);
+        IEnumerable<Tutorial> Get(int skip, int take);
         Task AddAsync(Tutorial tutorial);
         Task RemoveAsync(int id);
         Task UpdateAsync(int id, Tutorial newTutorial);

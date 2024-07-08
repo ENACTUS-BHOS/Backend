@@ -36,6 +36,21 @@ namespace Backend.Infrastructure.Services
             await _tutorialRepository.AddAsync(tutorial);
         }
 
+        public int TutorialsCount(string? search, string? category, bool? isSortAscending)
+        {
+            return _tutorialRepository.TutorialsCount(search, category, isSortAscending);
+        }
+
+        public IEnumerable<string> GetAllCategories()
+        {
+            return _tutorialRepository.GetAllCategories();
+        }
+
+        public IEnumerable<Tutorial> Get(int skip, int take, string? search, string? category, bool? isSortAscending)
+        {
+            return this._tutorialRepository.Get(skip, take, search, category, isSortAscending);
+        }
+
         public async Task RemoveAsync(int id)
         {
             await _tutorialRepository.RemoveAsync(id);

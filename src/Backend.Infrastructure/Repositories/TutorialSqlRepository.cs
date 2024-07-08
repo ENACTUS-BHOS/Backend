@@ -29,6 +29,75 @@ namespace Backend.Infrastructure.Repositories
             return tutorials;
         }
 
+        public IEnumerable<string> GetAllCategories()
+        {
+            var categories = this._context.Tutorials.Select(tutorial => tutorial.Category).Distinct();
+
+            return categories!;
+        }
+
+        public IEnumerable<Tutorial> Get(int skip, int take, string? search, string? category, bool? isSortAscending)
+        {
+            var tutorials = GetAll();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                tutorials = Search(search);
+            }
+
+            if (!string.IsNullOrWhiteSpace(category))
+            {
+                tutorials = tutorials.Where(tutorial => tutorial.Category!.ToLower().Contains(category.ToLower()) || category.ToLower().Contains(tutorial.Category.ToLower()));
+            }
+
+            if (isSortAscending != null)
+            {
+                if (isSortAscending == true)
+                {
+                    tutorials = tutorials.OrderBy(tutorial => tutorial.DurationInSeconds);
+                }
+                else
+                {
+                    tutorials = tutorials.OrderByDescending(tutorial => tutorial.DurationInSeconds);
+                }
+            }
+
+            tutorials = tutorials.Skip(skip).Take(take);
+
+            return tutorials;
+        }
+
+        public int TutorialsCount(string? search, string? category, bool? isSortAscending)
+        {
+            var tutorials = GetAll();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                tutorials = Search(search);
+            }
+
+            if (!string.IsNullOrWhiteSpace(category))
+            {
+                tutorials = tutorials.Where(tutorial => tutorial.Category!.ToLower().Contains(category.ToLower()) || category.ToLower().Contains(tutorial.Category.ToLower()));
+            }
+
+            if (isSortAscending != null)
+            {
+                if (isSortAscending == true)
+                {
+                    tutorials = tutorials.OrderBy(tutorial => tutorial.DurationInSeconds);
+                }
+                else
+                {
+                    tutorials = tutorials.OrderByDescending(tutorial => tutorial.DurationInSeconds);
+                }
+            }
+
+            var count = tutorials.Count();
+
+            return count;
+        }
+
         public async Task<Tutorial?> GetByIdAsync(int id)
         {
             return await _context.Tutorials.FirstOrDefaultAsync(t => t.Id == id);
@@ -37,7 +106,7 @@ namespace Backend.Infrastructure.Repositories
         public async Task AddAsync(Tutorial tutorial)
         {
             await _context.Tutorials.AddAsync(tutorial);
-            
+
             await _context.SaveChangesAsync();
         }
 

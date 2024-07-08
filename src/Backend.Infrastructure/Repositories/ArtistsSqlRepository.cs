@@ -57,6 +57,12 @@ public class ArtistsSqlRepository : IArtistsRepository
         artist!.Description = newArtist.Description;
 
         artist!.Major = newArtist.Major;
+        
+        artist!.PhoneNumber = newArtist.PhoneNumber;
+
+        artist!.InstagramUrl = newArtist.InstagramUrl;
+
+        artist!.FacebookUrl = newArtist.FacebookUrl;
 
         await this.dbContext.SaveChangesAsync();
     }
