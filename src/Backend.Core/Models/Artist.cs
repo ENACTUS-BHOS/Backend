@@ -9,6 +9,6 @@ public class Artist
     public string? Description { get; set; }
     public bool IsActive { get; set; } = true;
     public string? PhoneNumber { get; set; }
-     public string? InstagramUrl { get; set; }
-     public string? FacebookUrl { get; set; }
+    public string? InstagramUrl { get; set; }
+    public string? FacebookUrl { get; set; }
 }

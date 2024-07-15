@@ -23,18 +23,25 @@ public class ArtistsController : ControllerBase
     [HttpGet]
     public IActionResult GetAll()
     {
-        var artist = this.artistsService.GetAll();
+        var artists = this.artistsService.GetAll().OrderBy(a => a.Id);
 
-        return base.Ok(artist);
+        return base.Ok(artists);
     }
 
     [HttpGet]
-    [Route("{skip}/{take}")]
-    public IActionResult Get(int? skip, int? take)
+    public async Task<IActionResult> Get(int? skip, int? take, string? search, int? minimumPrice, int? maximumPrice, bool? isSortAscending)
     {
-        var products = this.artistsService.Get(skip, take);
+        var artists = await this.artistsService.GetAsync(skip, take, search, minimumPrice, maximumPrice, isSortAscending);
 
-        return base.Ok(products);
+        return base.Ok(artists);
+    }
+
+    [HttpGet]
+    public IActionResult GetArtistsCount(string? search)
+    {
+        var artists = this.artistsService.GetAll();
+
+        return base.Ok(artists.Count());
     }
 
     [HttpGet]

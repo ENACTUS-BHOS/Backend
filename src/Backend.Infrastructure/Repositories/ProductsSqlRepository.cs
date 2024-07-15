@@ -1,5 +1,8 @@
 namespace Backend.Infrastructure.Repositories;
 
+using System.Net;
+using System.Net.Mail;
+using System.Text;
 using Backend.Core.Models;
 using Backend.Core.Repositories;
 using Backend.Infrastructure.Data;
@@ -39,9 +42,49 @@ public class ProductsSqlRepository : IProductsRepository
         await this.dbContext.SaveChangesAsync();
     }
 
-    public Task OrderAsync(Order order)
+    public async Task OrderAsync(Order order)
     {
-        throw new NotImplementedException();
+        var product = await GetByIdAsync((int)order.ProductId!);
+
+        var artist = await this.dbContext.Artists.FirstOrDefaultAsync(a => a.Id == product!.ArtistId);
+
+        using (MailMessage mail = new MailMessage())
+        {
+            mail.From = new MailAddress("emil.abdullayev.std@bhos.edu.az");
+            
+            mail.To.Add("emil.abdullayev.std@bhos.edu.az");
+            
+            mail.Subject = "Order";
+
+            var width = "435";
+
+            var height = "500";
+
+            mail.Body = $"<h3>Name: {order.FullName}</h3><h4>Email address: {order.Email}</h4><h4>Phone number: {order.PhoneNumber}</h4><div><b>Product: </b>{product!.Name} by {artist!.Name}</div><br><div><b>Additional notes: </b>{order.AdditionalInformation}</div><br><div><b>Product image link: <a href={product.ImageUrl}>{product.ImageUrl}</a></b></div>";
+            
+            mail.IsBodyHtml = true;
+
+            mail.BodyEncoding = Encoding.UTF8;
+
+            mail.DeliveryNotificationOptions = DeliveryNotificationOptions.OnFailure;
+
+            using (SmtpClient client = new SmtpClient("smtp-mail.outlook.com", 587))
+            {
+                client.EnableSsl = true;
+
+                client.UseDefaultCredentials = false;
+
+                client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                
+                client.Credentials = new NetworkCredential("emil.abdullayev.std@bhos.edu.az", "2s2MrL51");
+                
+                client.Send(mail);
+            }
+        }
+
+        await this.dbContext.Orders.AddAsync(order);
+
+        await this.dbContext.SaveChangesAsync();
     }
 
     public async Task RemoveAsync(int id)

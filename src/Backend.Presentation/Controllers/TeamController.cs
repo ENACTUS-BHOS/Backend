@@ -24,7 +24,8 @@ public class TeamController : ControllerBase
     [HttpGet]
     public IActionResult GetAll()
     {
-        var teams = _teamService.GetAllTeams();
+        var teams = _teamService.GetAllTeams().OrderBy(t => t.Id);
+        
         return Ok(teams);
     }
 

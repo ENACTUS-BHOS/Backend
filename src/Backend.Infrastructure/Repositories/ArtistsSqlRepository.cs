@@ -1,5 +1,6 @@
 namespace Backend.Infrastructure.Repositories;
 
+using System.Linq;
 using Backend.Core.Models;
 using Backend.Core.Repositories;
 using Backend.Infrastructure.Data;
@@ -25,9 +26,47 @@ public class ArtistsSqlRepository : IArtistsRepository
         return artist!;
     }
 
-    public IEnumerable<Artist> Get(int skip, int take)
+    public async Task<IEnumerable<Artist>> GetAsync(int skip, int take, string? search, int? minimumPrice, int? maximumPrice, bool? isSortAscending)
     {
-        var artists = this.dbContext.Artists.Skip(skip).Take(take);
+        var artists = this.dbContext.Artists.AsEnumerable();
+
+        if(!string.IsNullOrWhiteSpace(search))
+        {
+            artists = artists.Where(a => a.Name.ToLower().Contains(search.ToLower()) || search.ToLower().Contains(a.Name.ToLower()));
+        }
+
+        var products = this.dbContext.Products.AsEnumerable();
+
+        if(!string.IsNullOrWhiteSpace(search))
+        {
+            products = products.Where(p => p.Name.ToLower().Contains(search.ToLower()) || search.ToLower().Contains(p.Name.ToLower()));
+        }
+
+        if(minimumPrice != null)
+        {
+            products = products.Where(p => p.Price > minimumPrice);
+        }
+
+        if(maximumPrice != null)
+        {
+            products = products.Where(p => p.Price < maximumPrice);
+        }
+
+        var artistsIds = artists.ToList().Select(p => p.Id).ToList();
+
+        foreach(var product in products.ToList())
+        {
+            if(!artistsIds.Contains((int)product.ArtistId!))
+            {
+                var artist = this.dbContext.Artists.ToList().FirstOrDefault(a => a.Id == (int)product.ArtistId!);
+
+                artists = artists.Append(artist)!;
+
+                artistsIds = artists.ToList().Select(p => p.Id).ToList();
+            }
+        }
+
+        artists = artists.Skip(skip).Take(take);
 
         return artists;
     }

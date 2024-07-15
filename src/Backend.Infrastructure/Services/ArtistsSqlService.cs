@@ -26,13 +26,13 @@ public class ArtistsSqlService : IArtistsService
         return artist;
     }
 
-    public IEnumerable<Artist> Get(int? skip, int? take)
+    public async Task<IEnumerable<Artist>> GetAsync(int? skip, int? take, string? search, int? minimumPrice, int? maximumPrice, bool? isSortAscending)
     {
         ArgumentNullException.ThrowIfNull(skip);
 
         ArgumentNullException.ThrowIfNull(take);
 
-        var artists = this.artistsRepository.Get((int)skip, (int)take);
+        var artists = await this.artistsRepository.GetAsync((int)skip, (int)take, search, minimumPrice, maximumPrice, isSortAscending);
 
         return artists;
     }

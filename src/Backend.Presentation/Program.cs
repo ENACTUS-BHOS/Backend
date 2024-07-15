@@ -21,29 +21,29 @@ builder.Services.AddDbContext<MirasDbContext>(dbContextOptionsBuilder =>
 });
 
 // Register the Artists services and repositories
-builder.Services.AddScoped<IArtistsRepository, ArtistsSqlRepository>();
-builder.Services.AddScoped<IArtistsService, ArtistsSqlService>();
+builder.Services.AddTransient<IArtistsRepository, ArtistsSqlRepository>();
+builder.Services.AddTransient<IArtistsService, ArtistsSqlService>();
 
 // Register the Team services and repositories
-builder.Services.AddScoped<ITeamRepository, TeamSqlRepository>();
-builder.Services.AddScoped<ITeamService, TeamSqlService>();
+builder.Services.AddTransient<ITeamRepository, TeamSqlRepository>();
+builder.Services.AddTransient<ITeamService, TeamSqlService>();
 
 // Register the Tutorial services and repositories
-builder.Services.AddScoped<ITutorialRepository, TutorialSqlRepository>();
-builder.Services.AddScoped<ITutorialService, TutorialSqlService>();
+builder.Services.AddTransient<ITutorialRepository, TutorialSqlRepository>();
+builder.Services.AddTransient<ITutorialService, TutorialSqlService>();
 
 // Register the Exhibition services and repositories
 
-builder.Services.AddScoped<IExhibitionRepository, ExhibitionSqlRepository>();
-builder.Services.AddScoped<IExhibitionService, ExhibitionSqlService>();
+builder.Services.AddTransient<IExhibitionRepository, ExhibitionSqlRepository>();
+builder.Services.AddTransient<IExhibitionService, ExhibitionSqlService>();
 
 // Register the Products services and repositories
-builder.Services.AddScoped<IProductsRepository, ProductsSqlRepository>();
-builder.Services.AddScoped<IProductsService, ProductSqlService>();
+builder.Services.AddTransient<IProductsRepository, ProductsSqlRepository>();
+builder.Services.AddTransient<IProductsService, ProductSqlService>();
 
 // Register the Orders services and repositories
-builder.Services.AddScoped<IOrdersRepository, OrdersSqlRepository>();
-builder.Services.AddScoped<IOrdersService, OrdersSqlServer>();
+builder.Services.AddTransient<IOrdersRepository, OrdersSqlRepository>();
+builder.Services.AddTransient<IOrdersService, OrdersSqlServer>();
 
 builder.Services.AddEndpointsApiExplorer();
 

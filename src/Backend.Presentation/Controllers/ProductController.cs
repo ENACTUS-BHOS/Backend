@@ -1,5 +1,6 @@
 namespace Backend.Presentation.Controllers;
 
+using System.Linq;
 using Backend.Core.Models;
 using Backend.Core.Services;
 using Backend.Infrastructure.Services;
@@ -38,12 +39,78 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet]
-    [Route("{authorId}")]
-    public IActionResult GetByAuthorId(int? authorId)
+    public IActionResult GetByAuthorId(int? authorId, int? skip, int? take, string? search, int? minimumPrice, int? maximumPrice, bool? isSortAscending)
     {
-        var product = this.productsService.GetByAuthorId(authorId);
+        var products = this.productsService.GetByAuthorId(authorId);
 
-        return base.Ok(product);
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            products = products.Where(p => p.Name.ToLower().Contains(search.ToLower()) || search.ToLower().Contains(p.Name.ToLower()));
+        }
+
+        if (minimumPrice != null)
+        {
+            products = products.Where(p => p.Price > minimumPrice);
+        }
+
+        if (maximumPrice != null)
+        {
+            products = products.Where(p => p.Price < maximumPrice);
+        }
+
+        if (isSortAscending != null)
+        {
+            if (isSortAscending == true)
+            {
+                products = products.OrderBy(p => p.Price);
+            }
+            else
+            {
+                products = products.OrderByDescending(p => p.Price);
+            }
+        }
+
+        if (skip != null && take != null)
+        {
+            products = products.Skip((int)skip).Take((int)take);
+        }
+
+        return base.Ok(products);
+    }
+
+    [HttpGet]
+    public IActionResult GetProductsCount(int? authorId, string? search, int? minimumPrice, int? maximumPrice, bool? isSortAscending)
+    {
+        var products = this.productsService.GetByAuthorId(authorId);
+
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            products = products.Where(p => p.Name.ToLower().Contains(search.ToLower()) || search.ToLower().Contains(p.Name.ToLower()));
+        }
+
+        if (minimumPrice != null)
+        {
+            products = products.Where(p => p.Price > minimumPrice);
+        }
+
+        if (maximumPrice != null)
+        {
+            products = products.Where(p => p.Price < maximumPrice);
+        }
+
+        if (isSortAscending != null)
+        {
+            if (isSortAscending == true)
+            {
+                products = products.OrderBy(p => p.Price);
+            }
+            else
+            {
+                products = products.OrderByDescending(p => p.Price);
+            }
+        }
+
+        return base.Ok(products.Count());
     }
 
     [HttpGet]
