@@ -2,6 +2,7 @@ namespace Backend.Presentation.Controllers
 {
     using Backend.Core.Models;
     using Backend.Core.Services;
+    using Backend.Infrastructure.Services;
     using Microsoft.AspNetCore.Http.Extensions;
     using Microsoft.AspNetCore.Mvc;
     using System.Collections.Generic;
@@ -11,11 +12,14 @@ namespace Backend.Presentation.Controllers
     [Route("/api/[controller]/[action]")]
     public class ExhibitionController : ControllerBase
     {
+        private readonly BlobContainerService blobContainerService;
         private readonly IExhibitionService _exhibitionService;
 
         public ExhibitionController(IExhibitionService exhibitionService)
         {
             _exhibitionService = exhibitionService;
+
+            this.blobContainerService = new BlobContainerService();
         }
 
         [HttpGet]
@@ -37,11 +41,47 @@ namespace Backend.Presentation.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddAsync([FromBody] Exhibition exhibition)
+        public async Task<IActionResult> AddAsync([FromForm] Exhibition exhibition, IFormFile coverImage, IFormFile video, IFormFileCollection images)
         {
             if (exhibition == null)
             {
                 return BadRequest();
+            }
+
+            if (coverImage != null)
+            {
+                var rawPath = Guid.NewGuid().ToString() + coverImage.FileName;
+
+                var path = rawPath.Replace(" ", "%20");
+
+                exhibition!.ImageUrl = "https://miras.blob.core.windows.net/multimedia/" + path;
+
+                await this.blobContainerService.UploadAsync(coverImage.OpenReadStream(), rawPath);
+            }
+
+            if (video != null)
+            {
+                var rawPath = Guid.NewGuid().ToString() + video.FileName;
+
+                var path = rawPath.Replace(" ", "%20");
+
+                exhibition!.VideoUrl = "https://miras.blob.core.windows.net/multimedia/" + path;
+
+                await this.blobContainerService.UploadAsync(video.OpenReadStream(), rawPath);
+            }
+
+            if (images != null)
+            {
+                foreach (var image in images)
+                {
+                    var rawPath = Guid.NewGuid().ToString() + image.FileName;
+
+                    var path = rawPath.Replace(" ", "%20");
+
+                    exhibition!.ImageUrls.Add("https://miras.blob.core.windows.net/multimedia/" + path);
+
+                    await this.blobContainerService.UploadAsync(image.OpenReadStream(), rawPath);
+                }
             }
 
             await _exhibitionService.AddAsync(exhibition);
