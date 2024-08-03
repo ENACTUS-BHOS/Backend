@@ -8,7 +8,9 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddNewtonsoftJson(options =>
+        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
 builder.Services.AddDbContext<MirasDbContext>(dbContextOptionsBuilder =>
 {
@@ -18,7 +20,7 @@ builder.Services.AddDbContext<MirasDbContext>(dbContextOptionsBuilder =>
     {
         o.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName);
     });
-});
+}, ServiceLifetime.Transient);
 
 // Register the Artists services and repositories
 builder.Services.AddTransient<IArtistsRepository, ArtistsSqlRepository>();
@@ -47,6 +49,8 @@ builder.Services.AddTransient<IOrdersService, OrdersSqlServer>();
 
 builder.Services.AddEndpointsApiExplorer();
 
+builder.WebHost.ConfigureKestrel(options => options.Limits.MaxRequestBodySize = 2047 * 1024 * 1024);
+
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddCors(options =>
@@ -65,8 +69,6 @@ var app = builder.Build();
 app.UseSwagger();
 
 app.UseSwaggerUI();
-
-app.UseHttpsRedirection();
 
 app.UseCors("BlazorWasmPolicy");
 

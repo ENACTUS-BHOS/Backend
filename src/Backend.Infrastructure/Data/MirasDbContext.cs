@@ -1,4 +1,5 @@
 namespace Backend.Infrastructure.Data;
+
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Backend.Core.Models;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,8 @@ public class MirasDbContext : DbContext
     public MirasDbContext(DbContextOptions<MirasDbContext> options) : base(options) { }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+            
             var stringListConverter = new ValueConverter<List<string>, string>(
                 v => string.Join(";", v),
                 v => v.Split(new[] { ';' }, StringSplitOptions.None).ToList());
@@ -22,5 +25,17 @@ public class MirasDbContext : DbContext
             modelBuilder.Entity<Exhibition>()
                 .Property(e => e.ImageUrls)
                 .HasConversion(stringListConverter);
+
+            modelBuilder.Entity<Artist>()
+                .HasMany<Product>()
+                .WithOne(product => product.Artist)
+                .HasForeignKey(product => product.ArtistId)
+                .IsRequired();
+            
+            modelBuilder.Entity<Product>()
+                .HasMany<Order>()
+                .WithOne(order => order.Product)
+                .HasForeignKey(order => order.ProductId)
+                .IsRequired();
         }
 }

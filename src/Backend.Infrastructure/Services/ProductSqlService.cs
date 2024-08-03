@@ -89,6 +89,11 @@ public class ProductSqlService : IProductsService
         return products;
     }
 
+    public async Task Translate()
+    {
+        await this.productsRepository.Translate();
+    }
+
     public async Task UpdateAsync(int? id, Product? newProduct)
     {
         ArgumentNullException.ThrowIfNull(id);

@@ -30,7 +30,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet]
-    [Route("{id}")]
+    [Route("{id:int}")]
     public async Task<IActionResult> GetByIdAsync(int? id)
     {
         var product = await this.productsService.GetByIdAsync(id);
@@ -181,6 +181,14 @@ public class ProductController : ControllerBase
     public async Task<IActionResult> OrderAsync(Order? order)
     {
         await this.productsService.OrderAsync(order!);
+
+        return base.Ok();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Translate()
+    {
+        await this.productsService.Translate();
 
         return base.Ok();
     }

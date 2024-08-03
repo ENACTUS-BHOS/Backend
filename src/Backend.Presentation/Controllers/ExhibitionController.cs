@@ -26,17 +26,47 @@ namespace Backend.Presentation.Controllers
         public IActionResult GetAll()
         {
             var exhibitions = _exhibitionService.GetAllExhibitions();
+            
             return Ok(exhibitions);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet]
+        public async Task<IActionResult> GetAsync(int skip, int take, string? search)
+        {
+            var exhibitions = await this._exhibitionService.GetAsync(skip, take, search);
+
+            return base.Ok(exhibitions);
+        }
+
+        [HttpGet]
+        public IActionResult GetCount(string? search)
+        {
+            var exhibitions = Enumerable.Empty<Exhibition>();
+            
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                exhibitions = this._exhibitionService.Search(search);
+            }
+            else
+            {
+                exhibitions = this._exhibitionService.GetAllExhibitions();
+            }
+            
+            var count = exhibitions.Count();
+
+            return base.Ok(count);
+        }
+
+        [HttpGet]
         public async Task<IActionResult> GetByIdAsync(int id)
         {
             var exhibition = await _exhibitionService.GetByIdAsync(id);
+            
             if (exhibition == null)
             {
                 return NotFound();
             }
+            
             return Ok(exhibition);
         }
 

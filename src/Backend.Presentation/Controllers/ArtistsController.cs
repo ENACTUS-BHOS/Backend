@@ -21,34 +21,28 @@ public class ArtistsController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        var artists = this.artistsService.GetAll().OrderBy(a => a.Id);
+        var artists = await this.artistsService.GetAll();
 
         return base.Ok(artists);
     }
 
     [HttpGet]
-    public async Task<IActionResult> Get(int? skip, int? take, string? search, int? minimumPrice, int? maximumPrice, bool? isSortAscending)
+    public async Task<IActionResult> Get(int? skip, int? take, int? takeProducts, string? search, int? minimumPrice,
+        int? maximumPrice, bool? isSortAscending)
     {
-        var artists = await this.artistsService.GetAsync(skip, take, search, minimumPrice, maximumPrice, isSortAscending);
+        var artistsCount = await this.artistsService.GetAsync(skip, take, takeProducts, search, minimumPrice, maximumPrice,
+            isSortAscending);
 
-        return base.Ok(artists);
+        return base.Ok(artistsCount);
     }
 
     [HttpGet]
-    public IActionResult GetArtistsCount(string? search)
+    public async Task<IActionResult> GetByIdAsync(int id, int skip, int take, string? search,
+        int? minimumPrice, int? maximumPrice, bool? isSortAscending)
     {
-        var artists = this.artistsService.GetAll();
-
-        return base.Ok(artists.Count());
-    }
-
-    [HttpGet]
-    [Route("{id}")]
-    public async Task<IActionResult> GetByIdAsync(int? id)
-    {
-        var product = await this.artistsService.GetByIdAsync(id);
+        var product = await this.artistsService.GetByIdAsync(id, skip, take, search, minimumPrice, maximumPrice, isSortAscending);
 
         return base.Ok(product);
     }
@@ -73,7 +67,7 @@ public class ArtistsController : ControllerBase
     }
 
     [HttpDelete]
-    [Route("{id}")]
+    [Route("{id:int}")]
     public async Task<IActionResult> DeleteAsync(int? id)
     {
         await this.artistsService.RemoveAsync(id);
@@ -82,10 +76,18 @@ public class ArtistsController : ControllerBase
     }
 
     [HttpPut]
-    [Route("{id}")]
+    [Route("{id:int}")]
     public async Task<IActionResult> UpdateAsync(int? id, Artist? artist)
     {
         await this.artistsService.UpdateAsync(id, artist);
+
+        return base.Ok();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Translate()
+    {
+        await this.artistsService.Translate();
 
         return base.Ok();
     }

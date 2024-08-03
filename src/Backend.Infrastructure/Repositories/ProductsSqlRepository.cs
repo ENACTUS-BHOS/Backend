@@ -6,6 +6,7 @@ using System.Text;
 using Backend.Core.Models;
 using Backend.Core.Repositories;
 using Backend.Infrastructure.Data;
+using Backend.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 
 public class ProductsSqlRepository : IProductsRepository
@@ -44,15 +45,15 @@ public class ProductsSqlRepository : IProductsRepository
 
     public async Task OrderAsync(Order order)
     {
-        var product = await GetByIdAsync((int)order.ProductId!);
+        var product = await dbContext.Products.AsNoTracking().FirstOrDefaultAsync(p => p.Id == order.ProductId);
 
-        var artist = await this.dbContext.Artists.FirstOrDefaultAsync(a => a.Id == product!.ArtistId);
+        var artist = await this.dbContext.Artists.AsNoTracking().FirstOrDefaultAsync(a => a.Id == product!.ArtistId);
 
         using (MailMessage mail = new MailMessage())
         {
-            mail.From = new MailAddress("emil.abdullayev.std@bhos.edu.az");
+            mail.From = new MailAddress("enactus_bhos@bhos.edu.az");
             
-            mail.To.Add("emil.abdullayev.std@bhos.edu.az");
+            mail.To.Add("enactus_bhos@bhos.edu.az");
             
             mail.Subject = "Order";
 
@@ -76,7 +77,7 @@ public class ProductsSqlRepository : IProductsRepository
 
                 client.DeliveryMethod = SmtpDeliveryMethod.Network;
                 
-                client.Credentials = new NetworkCredential("emil.abdullayev.std@bhos.edu.az", "2s2MrL51");
+                client.Credentials = new NetworkCredential("emil.abdullayev.std@bhos.edu.az", "Ral11334");
                 
                 client.Send(mail);
             }
@@ -139,5 +140,20 @@ public class ProductsSqlRepository : IProductsRepository
         products = products.Where(product => product.Price >= minimumPrice && product.Price <= maximumPrice);
 
         return products;
+    }
+
+    public async Task Translate()
+    {
+        var products = GetAll().ToList();
+
+        foreach (var product in products)
+        {
+            if(product.NameEn == null)
+            {
+                product.NameEn = await TranslateService.Translate(product.Name);
+            }
+
+            await this.dbContext.SaveChangesAsync();
+        }
     }
 }

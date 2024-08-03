@@ -8,6 +8,7 @@ namespace Backend.Core.Services
     {
         IEnumerable<Exhibition> GetAllExhibitions();
         Task<Exhibition?> GetByIdAsync(int id);
+        Task<IEnumerable<Exhibition>> GetAsync(int skip, int take, string? search);
         Task AddAsync(Exhibition exhibition);
         Task RemoveAsync(int id);
         Task UpdateAsync(int id, Exhibition exhibition);

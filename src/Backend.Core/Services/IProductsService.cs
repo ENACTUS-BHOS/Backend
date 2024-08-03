@@ -7,6 +7,7 @@ public interface IProductsService
     IEnumerable<Product> GetAll();
     IEnumerable<Product> GetByAuthorId(int? authorId);
     Task<Product?> GetByIdAsync(int? id);
+    Task Translate();
     IEnumerable<Product> TakeTop(int? count);
     Task AddAsync(Product? product);
     Task RemoveAsync(int? id);

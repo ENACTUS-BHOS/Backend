@@ -10,29 +10,30 @@ public class ArtistsSqlService : IArtistsService
 
     public ArtistsSqlService(IArtistsRepository artistsRepository) => this.artistsRepository = artistsRepository;
 
-    public IEnumerable<Artist> GetAll()
+    public async Task<IEnumerable<Artist>> GetAll()
     {
-        var artist = this.artistsRepository.GetAll();
+        var artist = await this.artistsRepository.GetAll();
 
         return artist;
     }
 
-    public async Task<Artist> GetByIdAsync(int? id)
+    public async Task<Tuple<Artist, int>> GetByIdAsync(int id, int skip, int take, string? search,
+        int? minimumPrice, int? maximumPrice, bool? isSortAscending)
     {
-        ArgumentNullException.ThrowIfNull(id);
-
-        var artist = await this.artistsRepository.GetByIdAsync((int)id);
+        var artist = await this.artistsRepository.GetByIdAsync(id, skip, take, search, minimumPrice, maximumPrice, isSortAscending);
 
         return artist;
     }
 
-    public async Task<IEnumerable<Artist>> GetAsync(int? skip, int? take, string? search, int? minimumPrice, int? maximumPrice, bool? isSortAscending)
+    public async Task<Tuple<IEnumerable<Artist>, int>> GetAsync(int? skip, int? take, int? takeProducts, string? search, int? minimumPrice, int? maximumPrice, bool? isSortAscending)
     {
         ArgumentNullException.ThrowIfNull(skip);
 
         ArgumentNullException.ThrowIfNull(take);
+        
+        ArgumentNullException.ThrowIfNull(takeProducts);
 
-        var artists = await this.artistsRepository.GetAsync((int)skip, (int)take, search, minimumPrice, maximumPrice, isSortAscending);
+        var artists = await this.artistsRepository.GetAsync((int)skip, (int)take, (int)takeProducts, search, minimumPrice, maximumPrice, isSortAscending);
 
         return artists;
     }
@@ -58,5 +59,10 @@ public class ArtistsSqlService : IArtistsService
         ArgumentNullException.ThrowIfNull(newArtist);
 
         await this.artistsRepository.UpdateAsync((int)id, newArtist);
+    }
+
+    public async Task Translate()
+    {
+        await this.artistsRepository.Translate();
     }
 }

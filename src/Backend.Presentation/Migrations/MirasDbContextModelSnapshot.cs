@@ -33,6 +33,9 @@ namespace Backend.Presentation.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
+                    b.Property<string>("DescriptionEn")
+                        .HasColumnType("text");
+
                     b.Property<string>("FacebookUrl")
                         .HasColumnType("text");
 
@@ -48,7 +51,13 @@ namespace Backend.Presentation.Migrations
                     b.Property<string>("Major")
                         .HasColumnType("text");
 
+                    b.Property<string>("MajorEn")
+                        .HasColumnType("text");
+
                     b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<string>("NameEn")
                         .HasColumnType("text");
 
                     b.Property<string>("PhoneNumber")
@@ -70,6 +79,9 @@ namespace Backend.Presentation.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
+                    b.Property<string>("DescriptionEn")
+                        .HasColumnType("text");
+
                     b.Property<string>("ImageUrl")
                         .HasColumnType("text");
 
@@ -81,6 +93,9 @@ namespace Backend.Presentation.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<string>("NameEn")
                         .HasColumnType("text");
 
                     b.Property<string>("VideoUrl")
@@ -114,10 +129,12 @@ namespace Backend.Presentation.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("text");
 
-                    b.Property<int?>("ProductId")
+                    b.Property<int>("ProductId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("Orders");
                 });
@@ -130,7 +147,10 @@ namespace Backend.Presentation.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("ArtistId")
+                    b.Property<int>("ArtistId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("ArtistId1")
                         .HasColumnType("integer");
 
                     b.Property<string>("ImageUrl")
@@ -142,10 +162,17 @@ namespace Backend.Presentation.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
+                    b.Property<string>("NameEn")
+                        .HasColumnType("text");
+
                     b.Property<int?>("Price")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ArtistId");
+
+                    b.HasIndex("ArtistId1");
 
                     b.ToTable("Products");
                 });
@@ -161,6 +188,9 @@ namespace Backend.Presentation.Migrations
                     b.Property<string>("Bio")
                         .HasColumnType("text");
 
+                    b.Property<string>("BioEn")
+                        .HasColumnType("text");
+
                     b.Property<string>("ImageUrl")
                         .HasColumnType("text");
 
@@ -170,7 +200,13 @@ namespace Backend.Presentation.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
+                    b.Property<string>("NameEn")
+                        .HasColumnType("text");
+
                     b.Property<string>("Role")
+                        .HasColumnType("text");
+
+                    b.Property<string>("RoleEn")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -189,6 +225,9 @@ namespace Backend.Presentation.Migrations
                     b.Property<string>("Category")
                         .HasColumnType("text");
 
+                    b.Property<string>("CategoryEn")
+                        .HasColumnType("text");
+
                     b.Property<int?>("DurationInSeconds")
                         .HasColumnType("integer");
 
@@ -198,12 +237,46 @@ namespace Backend.Presentation.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("text");
 
+                    b.Property<string>("TitleEn")
+                        .HasColumnType("text");
+
                     b.Property<string>("VideoUrl")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
                     b.ToTable("Tutorials");
+                });
+
+            modelBuilder.Entity("Backend.Core.Models.Order", b =>
+                {
+                    b.HasOne("Backend.Core.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("Backend.Core.Models.Product", b =>
+                {
+                    b.HasOne("Backend.Core.Models.Artist", "Artist")
+                        .WithMany()
+                        .HasForeignKey("ArtistId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Backend.Core.Models.Artist", null)
+                        .WithMany("Products")
+                        .HasForeignKey("ArtistId1");
+
+                    b.Navigation("Artist");
+                });
+
+            modelBuilder.Entity("Backend.Core.Models.Artist", b =>
+                {
+                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }

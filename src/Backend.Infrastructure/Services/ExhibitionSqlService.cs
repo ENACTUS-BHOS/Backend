@@ -26,6 +26,11 @@ namespace Backend.Infrastructure.Services
             return await _exhibitionRepository.GetByIdAsync(id);
         }
 
+        public async Task<IEnumerable<Exhibition>> GetAsync(int skip, int take, string? search)
+        {
+            return await this._exhibitionRepository.GetAsync(skip, take, search);
+        }
+
         public async Task AddAsync(Exhibition exhibition)
         {
             await _exhibitionRepository.AddAsync(exhibition);

@@ -19,12 +19,32 @@ namespace Backend.Infrastructure.Repositories
 
         public IEnumerable<Exhibition> GetAll()
         {
-            return _context.Exhibitions.Where(e => e.IsActive == true);
+            return _context.Exhibitions
+                .AsNoTracking()
+                .Where(e => e.IsActive == true)
+                .OrderByDescending(e => e.Id)
+                .ToList()
+                .DistinctBy(e => e.Id);
         }
 
         public async Task<Exhibition?> GetByIdAsync(int id)
         {
-            return await _context.Exhibitions.FirstOrDefaultAsync(e => e.Id == id);
+            return await _context.Exhibitions.AsNoTracking().FirstOrDefaultAsync(e => e.Id == id);
+        }
+
+        public async Task<IEnumerable<Exhibition>> GetAsync(int skip, int take, string search)
+        {
+            var allExhibitions = GetAll();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                allExhibitions = allExhibitions.Where(t => (t.Name.ToLower() ?? string.Empty).Contains(search.ToLower()) || (t.Description.ToLower() ?? string.Empty).Contains(search.ToLower())
+                    || search.Contains(t.Name.ToLower() ?? string.Empty) || search.Contains(t.Description.ToLower() ?? string.Empty));
+            }
+
+            allExhibitions = allExhibitions.Skip(skip).Take(take);
+
+            return allExhibitions;
         }
 
         public async Task AddAsync(Exhibition exhibition)
