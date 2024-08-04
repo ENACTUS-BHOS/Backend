@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Backend.Core.Models;
@@ -10,7 +11,6 @@ public class Product
     public int? Price { get; set; }
     public string? ImageUrl { get; set; }
     public bool IsActive { get; set; } = true;
-    [ForeignKey(nameof(Artist))]
     public int ArtistId { get; set; }
     public Artist? Artist { get; set; }
 }

@@ -154,6 +154,8 @@ public class ProductController : ControllerBase
             await this.blobContainerService.UploadAsync(file.OpenReadStream(), rawPath);
         }
 
+        product.Artist = null;
+        
         await this.productsService.AddAsync(product);
 
         return base.Created(base.HttpContext.Request.GetDisplayUrl(), product);

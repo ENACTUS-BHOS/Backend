@@ -38,8 +38,10 @@ public class ProductsSqlRepository : IProductsRepository
 
     public async Task AddAsync(Product product)
     {
-        await this.dbContext.Products.AddAsync(product);
-
+        product.Id = this.dbContext.Products.OrderBy(a => a.Id).LastOrDefault().Id + 1;
+        
+        await this.dbContext.AddAsync(product);
+        
         await this.dbContext.SaveChangesAsync();
     }
 
