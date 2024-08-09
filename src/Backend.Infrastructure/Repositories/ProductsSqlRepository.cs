@@ -39,9 +39,9 @@ public class ProductsSqlRepository : IProductsRepository
     public async Task AddAsync(Product product)
     {
         product.Id = this.dbContext.Products.OrderBy(a => a.Id).LastOrDefault().Id + 1;
-        
+
         await this.dbContext.AddAsync(product);
-        
+
         await this.dbContext.SaveChangesAsync();
     }
 
@@ -54,17 +54,18 @@ public class ProductsSqlRepository : IProductsRepository
         using (MailMessage mail = new MailMessage())
         {
             mail.From = new MailAddress("enactus_bhos@bhos.edu.az");
-            
+
             mail.To.Add("enactus_bhos@bhos.edu.az");
-            
+
             mail.Subject = "Order";
 
             var width = "435";
 
             var height = "500";
 
-            mail.Body = $"<h3>Name: {order.FullName}</h3><h4>Email address: {order.Email}</h4><h4>Phone number: {order.PhoneNumber}</h4><div><b>Product: </b>{product!.Name} by {artist!.Name}</div><br><div><b>Additional notes: </b>{order.AdditionalInformation}</div><br><div><b>Product image link: <a href={product.ImageUrl}>{product.ImageUrl}</a></b></div>";
-            
+            mail.Body =
+                $"<h3>Name: {order.FullName}</h3><h4>Email address: {order.Email}</h4><h4>Phone number: {order.PhoneNumber}</h4><div><b>Product: </b>{product!.Name} by {artist!.Name}</div><br><div><b>Additional notes: </b>{order.AdditionalInformation}</div><br><div><b>Product image link: <a href={product.ImageUrl}>{product.ImageUrl}</a></b></div>";
+
             mail.IsBodyHtml = true;
 
             mail.BodyEncoding = Encoding.UTF8;
@@ -78,9 +79,9 @@ public class ProductsSqlRepository : IProductsRepository
                 client.UseDefaultCredentials = false;
 
                 client.DeliveryMethod = SmtpDeliveryMethod.Network;
-                
+
                 client.Credentials = new NetworkCredential("emil.abdullayev.std@bhos.edu.az", "Ral11334");
-                
+
                 client.Send(mail);
             }
         }
@@ -104,13 +105,13 @@ public class ProductsSqlRepository : IProductsRepository
         var product = await this.dbContext.Products.FirstOrDefaultAsync(p => p.Id == id);
 
         product!.Name = newProduct.Name;
-        
+
         product!.ArtistId = newProduct.ArtistId;
-        
+
         product!.ImageUrl = newProduct.ImageUrl;
-        
+
         product!.Price = newProduct.Price;
-        
+
         product!.IsActive = newProduct.IsActive;
 
         await this.dbContext.SaveChangesAsync();
@@ -138,7 +139,7 @@ public class ProductsSqlRepository : IProductsRepository
     public IEnumerable<Product> FilterByPrice(int authorId, int minimumPrice, int maximumPrice)
     {
         var products = this.dbContext.Products.Where(product => product.ArtistId == authorId);
-        
+
         products = products.Where(product => product.Price >= minimumPrice && product.Price <= maximumPrice);
 
         return products;
@@ -150,7 +151,7 @@ public class ProductsSqlRepository : IProductsRepository
 
         foreach (var product in products)
         {
-            if(product.NameEn == null)
+            if (product.NameEn == null)
             {
                 product.NameEn = await TranslateService.Translate(product.Name);
             }

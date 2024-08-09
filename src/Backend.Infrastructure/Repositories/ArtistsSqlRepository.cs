@@ -14,6 +14,7 @@ public class ArtistsSqlRepository(MirasDbContext dbContext) : IArtistsRepository
         var artists = await dbContext.Artists
             .AsNoTracking()
             .Where(artist => artist.IsActive == true)
+            .Where(artist => !string.IsNullOrWhiteSpace(artist.ImageUrl))
             .OrderBy(a => a.Id)
             .ToListAsync();
 

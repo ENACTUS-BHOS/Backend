@@ -22,6 +22,10 @@ builder.Services.AddDbContext<MirasDbContext>(dbContextOptionsBuilder =>
     });
 }, ServiceLifetime.Transient);
 
+builder.Services.AddEntityFrameworkNpgsqlFuzzyStringMatch();
+
+builder.Services.AddEntityFrameworkNpgsql();
+
 // Register the Artists services and repositories
 builder.Services.AddTransient<IArtistsRepository, ArtistsSqlRepository>();
 builder.Services.AddTransient<IArtistsService, ArtistsSqlService>();
@@ -49,8 +53,6 @@ builder.Services.AddTransient<IOrdersService, OrdersSqlServer>();
 
 builder.Services.AddEndpointsApiExplorer();
 
-builder.WebHost.ConfigureKestrel(options => options.Limits.MaxRequestBodySize = 2047 * 1024 * 1024);
-
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddCors(options =>
@@ -60,7 +62,8 @@ builder.Services.AddCors(options =>
         corsBuilder
             .AllowAnyOrigin()
             .AllowAnyHeader()
-            .AllowAnyMethod();
+            .AllowAnyMethod()
+            .AllowCredentials();
     });
 });
 

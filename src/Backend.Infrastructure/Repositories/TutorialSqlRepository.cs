@@ -1,3 +1,5 @@
+using FuzzySharp;
+
 namespace Backend.Infrastructure.Repositories
 {
     using System.Collections.Generic;
@@ -7,6 +9,7 @@ namespace Backend.Infrastructure.Repositories
     using Backend.Core.Repositories;
     using Backend.Infrastructure.Data;
     using Microsoft.EntityFrameworkCore;
+    using FuzzyString;
 
     public class TutorialSqlRepository : ITutorialRepository
     {
