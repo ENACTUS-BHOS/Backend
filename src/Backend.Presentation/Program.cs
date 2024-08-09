@@ -22,8 +22,6 @@ builder.Services.AddDbContext<MirasDbContext>(dbContextOptionsBuilder =>
     });
 }, ServiceLifetime.Transient);
 
-builder.Services.AddEntityFrameworkNpgsqlFuzzyStringMatch();
-
 builder.Services.AddEntityFrameworkNpgsql();
 
 // Register the Artists services and repositories
@@ -60,7 +58,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("BlazorWasmPolicy", corsBuilder =>
     {
         corsBuilder
-            .AllowAnyOrigin()
+            .WithOrigins("http://artlegacy.co", "https://artlegacy.co", "http://localhost:8080")
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials();
