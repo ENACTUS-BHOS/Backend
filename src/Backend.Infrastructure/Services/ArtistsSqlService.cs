@@ -17,7 +17,7 @@ public class ArtistsSqlService : IArtistsService
         return artist;
     }
 
-    public async Task<Tuple<Artist, int>> GetByIdAsync(int id, int skip, int take, string? search,
+    public async Task<Artist> GetByIdAsync(int id, int skip, int take, string? search,
         int? minimumPrice, int? maximumPrice, bool? isSortAscending)
     {
         var artist = await this.artistsRepository.GetByIdAsync(id, skip, take, search, minimumPrice, maximumPrice, isSortAscending);
@@ -25,7 +25,15 @@ public class ArtistsSqlService : IArtistsService
         return artist;
     }
 
-    public async Task<Tuple<IEnumerable<Artist>, int>> GetAsync(int? skip, int? take, int? takeProducts, string? search, int? minimumPrice, int? maximumPrice, bool? isSortAscending)
+    public async Task<int> GetCountAsync(int id, string? search,
+        int? minimumPrice, int? maximumPrice)
+    {
+        var count = await this.artistsRepository.GetCountAsync(id, search, minimumPrice, maximumPrice);
+
+        return count;
+    }
+
+    public async Task<ProductsCount> GetAsync(int? skip, int? take, int? takeProducts, string? search, int? minimumPrice, int? maximumPrice, bool? isSortAscending)
     {
         ArgumentNullException.ThrowIfNull(skip);
 

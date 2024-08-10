@@ -22,7 +22,7 @@ public class ArtistsSqlRepository(MirasDbContext dbContext) : IArtistsRepository
             .DistinctBy(a => a.Id);
     }
 
-    public async Task<Tuple<Artist, int>> GetByIdAsync(int id, int skip, int take, string? search,
+    public async Task<Artist> GetByIdAsync(int id, int skip, int take, string? search,
         int? minimumPrice, int? maximumPrice, bool? isSortAscending)
     {
         var artist = await dbContext.Artists
@@ -39,15 +39,22 @@ public class ArtistsSqlRepository(MirasDbContext dbContext) : IArtistsRepository
             .AsSplitQuery()
             .FirstOrDefaultAsync();
 
-        var productsCount = await dbContext.Artists.Where(a => a.Id == id).Select(a => a.Products
-            .Where(p => p.Name.ToLower().Contains((search ?? p.Name).ToLower()) ||
-                        (search ?? p.Name).ToLower().Contains(p.Name.ToLower()))
-            .Where(p => p.Price >= (minimumPrice ?? 0)).Count(p => p.Price <= (maximumPrice ?? int.MaxValue))).FirstOrDefaultAsync();
-
-        return new Tuple<Artist, int>(artist, productsCount);
+        return artist;
     }
 
-    public async Task<Tuple<IEnumerable<Artist>, int>> GetAsync(int skip, int take, int takeProducts, string? search,
+    public async Task<int> GetCountAsync(int id, string? search,
+        int? minimumPrice, int? maximumPrice)
+    {
+        var productsCount = await dbContext.Artists.Where(a => a.Id == id).Select(a => a.Products
+                .Where(p => p.Name.ToLower().Contains((search ?? p.Name).ToLower()) ||
+                            (search ?? p.Name).ToLower().Contains(p.Name.ToLower()))
+                .Where(p => p.Price >= (minimumPrice ?? 0)).Count(p => p.Price <= (maximumPrice ?? int.MaxValue)))
+            .FirstOrDefaultAsync();
+
+        return productsCount;
+    }
+
+    public async Task<ProductsCount> GetAsync(int skip, int take, int takeProducts, string? search,
         int? minimumPrice, int? maximumPrice, bool? isSortAscending)
     {
         var artistsByName = await dbContext.Artists
@@ -82,15 +89,14 @@ public class ArtistsSqlRepository(MirasDbContext dbContext) : IArtistsRepository
             .OrderBy(a => a.Id)
             .DistinctBy(a => a.Id);
 
-        return new Tuple<IEnumerable<Artist>, int>
-        (
-            artists
+        return new ProductsCount
+        {
+            Artists = artists
                 .Skip(skip)
-                .Take(take)
-            ,
-            artists
+                .Take(take),
+            Count = artists
                 .Count()
-        );
+        };
     }
 
     public async Task AddAsync(Artist artist)

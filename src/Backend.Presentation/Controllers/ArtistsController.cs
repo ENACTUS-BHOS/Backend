@@ -46,6 +46,15 @@ public class ArtistsController : ControllerBase
 
         return base.Ok(product);
     }
+    
+    [HttpGet]
+    public async Task<IActionResult> GetCountAsync(int id, string? search,
+        int? minimumPrice, int? maximumPrice)
+    {
+        var count = await this.artistsService.GetCountAsync(id, search, minimumPrice, maximumPrice);
+
+        return base.Ok(count);
+    }
 
     [HttpPost]
     public async Task<IActionResult> AddAsync([FromForm] Artist? artist, IFormFile? file)
