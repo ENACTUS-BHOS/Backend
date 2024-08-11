@@ -140,7 +140,9 @@ namespace Backend.Infrastructure.Repositories
         public IEnumerable<Tutorial> Search(string searchTerm)
         {
             return _context.Tutorials.Where(t => (t.Title.ToLower() ?? string.Empty).Contains(searchTerm.ToLower())
-            || searchTerm.Contains(t.Title.ToLower() ?? string.Empty));
+            || searchTerm.Contains(t.Title.ToLower() ?? string.Empty) ||
+            (t.TitleEn.ToLower() ?? string.Empty).Contains(searchTerm.ToLower())
+            || searchTerm.Contains(t.TitleEn.ToLower() ?? string.Empty));
         }
 
         public IEnumerable<Tutorial> GetByCategory(string category)

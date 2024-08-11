@@ -39,7 +39,9 @@ namespace Backend.Infrastructure.Repositories
             if (!string.IsNullOrWhiteSpace(search))
             {
                 allExhibitions = allExhibitions.Where(t => (t.Name.ToLower() ?? string.Empty).Contains(search.ToLower()) || (t.Description.ToLower() ?? string.Empty).Contains(search.ToLower())
-                    || search.Contains(t.Name.ToLower() ?? string.Empty) || search.Contains(t.Description.ToLower() ?? string.Empty));
+                    || search.Contains(t.Name.ToLower() ?? string.Empty) || search.Contains(t.Description.ToLower() ?? string.Empty) ||
+                    (t.NameEn.ToLower() ?? string.Empty).Contains(search.ToLower()) || (t.DescriptionEn.ToLower() ?? string.Empty).Contains(search.ToLower())
+                    || search.Contains(t.NameEn.ToLower() ?? string.Empty) || search.Contains(t.DescriptionEn.ToLower() ?? string.Empty));
             }
 
             allExhibitions = allExhibitions.Skip(skip).Take(take);
@@ -80,15 +82,17 @@ namespace Backend.Infrastructure.Repositories
             }
         }
 
-        public IEnumerable<Exhibition> Search(string searchTerm)
+        public IEnumerable<Exhibition> Search(string search)
         {
-            if (string.IsNullOrWhiteSpace(searchTerm))
+            if (string.IsNullOrWhiteSpace(search))
             {
                 return Enumerable.Empty<Exhibition>();
             }
 
-            return _context.Exhibitions.Where(t => (t.Name.ToLower() ?? string.Empty).Contains(searchTerm.ToLower()) || (t.Description.ToLower() ?? string.Empty).Contains(searchTerm.ToLower())
-            || searchTerm.Contains(t.Name.ToLower() ?? string.Empty) || searchTerm.Contains(t.Description.ToLower() ?? string.Empty));
+            return _context.Exhibitions.Where(t => (t.Name.ToLower() ?? string.Empty).Contains(search.ToLower()) || (t.Description.ToLower() ?? string.Empty).Contains(search.ToLower())
+                || search.Contains(t.Name.ToLower() ?? string.Empty) || search.Contains(t.Description.ToLower() ?? string.Empty) ||
+                (t.NameEn.ToLower() ?? string.Empty).Contains(search.ToLower()) || (t.DescriptionEn.ToLower() ?? string.Empty).Contains(search.ToLower())
+                || search.Contains(t.NameEn.ToLower() ?? string.Empty) || search.Contains(t.DescriptionEn.ToLower() ?? string.Empty));
         }
     }
 }

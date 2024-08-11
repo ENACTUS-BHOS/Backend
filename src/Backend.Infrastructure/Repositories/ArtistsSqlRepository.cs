@@ -30,7 +30,9 @@ public class ArtistsSqlRepository(MirasDbContext dbContext) : IArtistsRepository
             .Where(a => a.Id == id)
             .Include(artist => artist.Products
                 .Where(p => p.Name.ToLower().Contains((search ?? p.Name).ToLower()) ||
-                            (search ?? p.Name).ToLower().Contains(p.Name.ToLower()))
+                            (search ?? p.Name).ToLower().Contains(p.Name.ToLower()) ||
+                            p.NameEn.ToLower().Contains((search ?? p.NameEn).ToLower()) ||
+                            (search ?? p.NameEn).ToLower().Contains(p.NameEn.ToLower()))
                 .Where(p => p.Price >= (minimumPrice ?? 0))
                 .Where(p => p.Price <= (maximumPrice ?? int.MaxValue))
                 .OrderBy(p => (isSortAscending != null ? (isSortAscending == true ? p.Price : -p.Price) : p.Id))
@@ -47,7 +49,9 @@ public class ArtistsSqlRepository(MirasDbContext dbContext) : IArtistsRepository
     {
         var productsCount = await dbContext.Artists.Where(a => a.Id == id).Select(a => a.Products
                 .Where(p => p.Name.ToLower().Contains((search ?? p.Name).ToLower()) ||
-                            (search ?? p.Name).ToLower().Contains(p.Name.ToLower()))
+                            (search ?? p.Name).ToLower().Contains(p.Name.ToLower()) || 
+                            p.NameEn.ToLower().Contains((search ?? p.NameEn).ToLower()) ||
+                            (search ?? p.NameEn).ToLower().Contains(p.NameEn.ToLower()))
                 .Where(p => p.Price >= (minimumPrice ?? 0)).Count(p => p.Price <= (maximumPrice ?? int.MaxValue)))
             .FirstOrDefaultAsync();
 
@@ -61,7 +65,9 @@ public class ArtistsSqlRepository(MirasDbContext dbContext) : IArtistsRepository
             .AsNoTracking()
             .Where(artist => artist.IsActive == true)
             .Where(a => a.Name.ToLower().Contains((search ?? a.Name).ToLower()) ||
-                        (search ?? a.Name).ToLower().Contains(a.Name.ToLower()))
+                        (search ?? a.Name).ToLower().Contains(a.Name.ToLower()) || 
+                        a.NameEn.ToLower().Contains((search ?? a.NameEn).ToLower()) ||
+                        (search ?? a.NameEn).ToLower().Contains(a.NameEn.ToLower()))
             .Include(a => a.Products
                 .Where(p => p.Price >= (minimumPrice ?? 0))
                 .Where(p => p.Price <= (maximumPrice ?? int.MaxValue))
@@ -75,7 +81,9 @@ public class ArtistsSqlRepository(MirasDbContext dbContext) : IArtistsRepository
             .Where(artist => artist.IsActive == true)
             .Include(artist => artist.Products
                 .Where(p => p.Name.ToLower().Contains((search ?? p.Name).ToLower()) ||
-                            (search ?? p.Name).ToLower().Contains(p.Name.ToLower()))
+                            (search ?? p.Name).ToLower().Contains(p.Name.ToLower()) || 
+                            p.NameEn.ToLower().Contains((search ?? p.NameEn).ToLower()) ||
+                            (search ?? p.NameEn).ToLower().Contains(p.NameEn.ToLower()))
                 .Where(p => p.Price >= (minimumPrice ?? 0))
                 .Where(p => p.Price <= (maximumPrice ?? int.MaxValue))
                 .OrderBy(p => (isSortAscending != null ? (isSortAscending == true ? p.Price : -p.Price) : p.Id))
