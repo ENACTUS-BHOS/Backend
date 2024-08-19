@@ -58,7 +58,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("BlazorWasmPolicy", corsBuilder =>
     {
         corsBuilder
-            .AllowAnyOrigin()
+            .WithOrigins("https://artlegacy.co", "https://www.artlegacy.co")
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
@@ -66,9 +66,12 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-app.UseSwagger();
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
 
-app.UseSwaggerUI();
+    app.UseSwaggerUI();
+}
 
 app.UseCors("BlazorWasmPolicy");
 
