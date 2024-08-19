@@ -73,13 +73,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors(corsBuilder =>
-{
-    corsBuilder.WithOrigins("https://*artlegacy.co")
-        .SetIsOriginAllowedToAllowWildcardSubdomains()
-        .AllowAnyHeader()
-        .AllowAnyMethod();
-});
+app.UseCors(policyName: "BlazorWasmPolicy");
 
 app.UseAuthorization();
 
