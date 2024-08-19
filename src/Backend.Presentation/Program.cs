@@ -75,7 +75,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors(corsBuilder =>
 {
-    corsBuilder.WithOrigins("https://artlegacy.co", "https://www.artlegacy.co")
+    corsBuilder.WithOrigins("https://*artlegacy.co")
+        .SetIsOriginAllowedToAllowWildcardSubdomains()
         .AllowAnyHeader()
         .AllowAnyMethod();
 });
