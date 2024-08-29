@@ -33,7 +33,7 @@ public class ArtistsSqlService : IArtistsService
         return count;
     }
 
-    public async Task<ProductsCount> GetAsync(int? skip, int? take, int? takeProducts, string? search, int? minimumPrice, int? maximumPrice, bool? isSortAscending)
+    public async Task<ProductsCount> GetAsync(int? skip, int? take, int? takeProducts, string? search, int? minimumPrice, int? maximumPrice, bool? isSortAscending, int guid)
     {
         ArgumentNullException.ThrowIfNull(skip);
 
@@ -41,7 +41,7 @@ public class ArtistsSqlService : IArtistsService
         
         ArgumentNullException.ThrowIfNull(takeProducts);
 
-        var artists = await this.artistsRepository.GetAsync((int)skip, (int)take, (int)takeProducts, search, minimumPrice, maximumPrice, isSortAscending);
+        var artists = await this.artistsRepository.GetAsync((int)skip, (int)take, (int)takeProducts, search, minimumPrice, maximumPrice, isSortAscending, guid);
 
         return artists;
     }

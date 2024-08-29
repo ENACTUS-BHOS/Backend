@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: enactus
+spec:
+  selector:
+    matchLabels:
+      app: enactus
+  template:
+    metadata:
+      labels:
+        app: enactus
+    spec:
+      containers:
+      - name: enactus
+        image: emilabdullayev/enactus:latest
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 80

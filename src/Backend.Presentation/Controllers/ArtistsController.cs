@@ -30,10 +30,10 @@ public class ArtistsController : ControllerBase
 
     [HttpGet]
     public async Task<IActionResult> Get(int? skip, int? take, int? takeProducts, string? search, int? minimumPrice,
-        int? maximumPrice, bool? isSortAscending)
+        int? maximumPrice, bool? isSortAscending, int guid)
     {
         var artistsCount = await this.artistsService.GetAsync(skip, take, takeProducts, search, minimumPrice, maximumPrice,
-            isSortAscending);
+            isSortAscending, guid);
 
         return base.Ok(artistsCount);
     }

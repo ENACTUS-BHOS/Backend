@@ -59,7 +59,7 @@ public class ArtistsSqlRepository(MirasDbContext dbContext) : IArtistsRepository
     }
 
     public async Task<ProductsCount> GetAsync(int skip, int take, int takeProducts, string? search,
-        int? minimumPrice, int? maximumPrice, bool? isSortAscending)
+        int? minimumPrice, int? maximumPrice, bool? isSortAscending, int? guid)
     {
         var artistsByName = await dbContext.Artists
             .AsNoTracking()
@@ -94,7 +94,8 @@ public class ArtistsSqlRepository(MirasDbContext dbContext) : IArtistsRepository
         var artists = artistsByName
             .Union(artistsByProducts
                 .Where(artist => artist.Products.Count > 0))
-            .OrderBy(a => a.Id)
+            .OrderBy(a => a.Id % guid)
+            .ThenBy(a => a.Id)
             .DistinctBy(a => a.Id);
 
         return new ProductsCount
